@@ -389,15 +389,16 @@ class Message extends Base {
             if (!msg) {
                 return undefined;
             }
-            if (msg.mediaData.mediaStage != 'RESOLVED') {
+            
+            if (msg.mediaData?.mediaStage != 'RESOLVED' && msg.mediaObject?.mediaStage != 'RESOLVED') {
                 // try to resolve media
                 await msg.downloadMedia({
                     downloadEvenIfExpensive: true,
                     rmrReason: 1
                 });
             }
-
-            if (msg.mediaData.mediaStage.includes('ERROR') || msg.mediaData.mediaStage === 'FETCHING') {
+            
+            if (msg.mediaData?.mediaStage?.includes('ERROR') || msg.mediaData?.mediaStage === 'FETCHING' || msg.mediaObject?.downloadStage?.includes('ERROR') || msg.mediaObject?.downloadStage === 'FETCHING') {
                 // media could not be downloaded
                 return undefined;
             }
